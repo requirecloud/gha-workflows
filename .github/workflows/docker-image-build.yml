@@ -9,7 +9,7 @@ on:
         type: string
       registry:
         description: 'Docker Registry'
-        required: true
+        required: false
         type: string
         default: ghcr.io
       push:
