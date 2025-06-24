@@ -4,7 +4,7 @@
 
 Workflow: `.github/workflows/docker-image-build.yml`
 
-This workflow builds Docker images with optimized caching for faster builds.
+This workflow builds Docker images with optimized caching for faster builds. It supports multi-architecture builds for both linux/amd64 and linux/arm64 platforms using the "image" exporter type which properly handles manifest lists required for multi-architecture images.
 
 ### Inputs
 

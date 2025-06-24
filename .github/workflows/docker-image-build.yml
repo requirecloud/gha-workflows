@@ -77,6 +77,6 @@ jobs:
             ${{ inputs.push == true && format('*.cache-from=type=registry,ref={0}/{1}:buildcache', inputs.registry, inputs.image) || '' }}
             *.cache-to=type=gha,scope=${{ github.repository }}-${{ github.ref_name }},mode=max
             ${{ inputs.push == true && format('*.cache-to=type=registry,ref={0}/{1}:buildcache,mode=max', inputs.registry, inputs.image) || '' }}
-            *.output=type=docker,push=${{ inputs.push }}
+            *.output=type=image,push=${{ inputs.push }}
             *.platform=linux/amd64,linux/arm64
             *.pull=true
