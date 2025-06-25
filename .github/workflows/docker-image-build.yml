@@ -62,6 +62,8 @@ jobs:
             type=ref,event=tag
             # pull request event
             type=ref,event=pr
+            # dynamically set the branch name and sha as a custom tag
+            type=raw,value=build-${{ github.run_number }}
 
       - name: Build and push
         uses: docker/bake-action@v6
