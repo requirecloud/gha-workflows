@@ -1,51 +1,5 @@
 # GitHub Actions - Shared Workflows
 
-## Zero Trust SSH
-
-Workflow: `.github/workflows/zero-trust-ssh.yml`
-
-This workflow establishes a Zero Trust SSH connection using either Tailscale or Twingate, and sets up SSH keys for secure access to remote hosts. It's designed to enable secure SSH connections in GitHub Actions workflows without exposing hosts to the public internet.
-
-### Inputs
-
-- `zerotrust`: Which Zero Trust service to use. Options: `tailscale` or `twingate`. Default value: `tailscale`
-- `ssh_host`: SSH host to set in ssh config. Optional, only used when `KNOWN_HOSTS` secret is not provided
-
-### Secrets
-
-The workflow requires different secrets depending on the Zero Trust service selected:
-
-**For Tailscale:**
-- `TS_OAUTH_CLIENT_ID`: Tailscale OAuth client ID
-- `TS_OAUTH_SECRET`: Tailscale OAuth secret
-
-**For Twingate:**
-- `TWINGATE_SERVICE_KEY`: Twingate service key
-
-**SSH Configuration (required for both):**
-- `PRIVATE_SSH_KEY`: Private SSH key for authentication
-- `KNOWN_HOSTS`: (Optional) Known hosts file content. If not provided, `ssh_host` input must be set
-
-### Usage
-
-```yaml
-name: Deploy via Zero Trust SSH
-
-on:
-  push:
-  workflow_dispatch:
-
-jobs:
-
-  zero-trust-ssh:
-
-    uses: requirecloud/gha-workflows/.github/workflows/zero-trust-ssh.yml@main
-    with:
-      zerotrust: tailscale
-      ssh_host: myserver.internal
-    secrets: inherit
-```
-
 ## Docker - Build image
 
 Workflow: `.github/workflows/docker-image-build.yml`
