@@ -13,6 +13,30 @@ on:
         required: false
         type: string
         default: ''
+      ts_oauth_client_id:
+        description: 'Tailscale OAuth client ID'
+        required: false
+        type: string
+        default: ''
+      ts_oauth_secret:
+        description: 'Tailscale OAuth secret'
+        required: false
+        type: string
+        default: ''
+      twingate_service_key:
+        description: 'Twingate service key'
+        required: false
+        type: string
+        default: ''
+      private_ssh_key:
+        description: 'Private SSH key for authentication'
+        required: true
+        type: string
+      known_hosts:
+        description: 'Known hosts file content'
+        required: false
+        type: string
+        default: ''
 
 jobs:
 
@@ -29,8 +53,8 @@ jobs:
         if: ${{ inputs.zerotrust == 'tailscale' }}
         uses: tailscale/github-action@v3
         with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          oauth-client-id: ${{ inputs.ts_oauth_client_id }}
+          oauth-secret: ${{ inputs.ts_oauth_secret }}
           tags: tag:ci
           use-cache: 'true'
 
@@ -38,25 +62,25 @@ jobs:
         if: ${{ inputs.zerotrust == 'twingate' }}
         uses: twingate/github-action@v1
         with:
-          service-key: ${{ secrets.TWINGATE_SERVICE_KEY }}
+          service-key: ${{ inputs.twingate_service_key }}
 
       - name: Setup SSH key with known hosts
-        if: ${{ secrets.KNOWN_HOSTS != '' }}
+        if: ${{ inputs.known_hosts != '' }}
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.PRIVATE_SSH_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          key: ${{ inputs.private_ssh_key }}
+          known_hosts: ${{ inputs.known_hosts }}
 
       - name: Setup SSH key without known hosts
-        if: ${{ secrets.KNOWN_HOSTS == '' && inputs.ssh_host != '' }}
+        if: ${{ inputs.known_hosts == '' && inputs.ssh_host != '' }}
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          key: ${{ inputs.private_ssh_key }}
           known_hosts: unnecessary
           if_key_exists: replace
           config: |
-            Host ${{ input.SSH_HOST }}
-              HostName ${{ input.SSH_HOST }}
+            Host ${{ inputs.ssh_host }}
+              HostName ${{ inputs.ssh_host }}
               StrictHostKeyChecking no
               ControlMaster auto
               ControlPath ~/.ssh/control-%C
