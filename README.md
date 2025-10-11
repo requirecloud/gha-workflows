@@ -8,20 +8,23 @@ This workflow establishes a Zero Trust SSH connection using either Tailscale or 
 
 ### Inputs
 
-**General:**
-- `zerotrust`: (Required) Which Zero Trust service to use. Options: `tailscale` or `twingate`. Default value: `tailscale`
-- `ssh_host`: (Optional) SSH host to set in ssh config. Only used when `known_hosts` is not provided
+- `zerotrust`: Which Zero Trust service to use. Options: `tailscale` or `twingate`. Default value: `tailscale`
+- `ssh_host`: SSH host to set in ssh config. Optional, only used when `KNOWN_HOSTS` secret is not provided
+
+### Secrets
+
+The workflow requires different secrets depending on the Zero Trust service selected:
 
 **For Tailscale:**
-- `ts_oauth_client_id`: (Optional) Tailscale OAuth client ID. Required when `zerotrust` is set to `tailscale`
-- `ts_oauth_secret`: (Optional) Tailscale OAuth secret. Required when `zerotrust` is set to `tailscale`
+- `TS_OAUTH_CLIENT_ID`: Tailscale OAuth client ID
+- `TS_OAUTH_SECRET`: Tailscale OAuth secret
 
 **For Twingate:**
-- `twingate_service_key`: (Optional) Twingate service key. Required when `zerotrust` is set to `twingate`
+- `TWINGATE_SERVICE_KEY`: Twingate service key
 
-**SSH Configuration:**
-- `private_ssh_key`: (Required) Private SSH key for authentication
-- `known_hosts`: (Optional) Known hosts file content. If not provided, `ssh_host` input must be set
+**SSH Configuration (required for both):**
+- `PRIVATE_SSH_KEY`: Private SSH key for authentication
+- `KNOWN_HOSTS`: (Optional) Known hosts file content. If not provided, `ssh_host` input must be set
 
 ### Usage
 
@@ -40,10 +43,7 @@ jobs:
     with:
       zerotrust: tailscale
       ssh_host: myserver.internal
-      ts_oauth_client_id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-      ts_oauth_secret: ${{ secrets.TS_OAUTH_SECRET }}
-      private_ssh_key: ${{ secrets.PRIVATE_SSH_KEY }}
-      known_hosts: ${{ secrets.KNOWN_HOSTS }}
+    secrets: inherit
 ```
 
 ## Docker - Build image
