@@ -8,6 +8,11 @@ on:
         required: false
         type: string
         default: Dockerfile
+      target:
+        description: 'Docker build target'
+        required: false
+        type: string
+        default: ''
       image:
         description: 'Docker image name'
         required: true
@@ -87,6 +92,7 @@ jobs:
         with:
           context: .
           file: ./${{ inputs.dockerfile }}
+          target: ${{ inputs.target }}
           platforms: ${{ inputs.platforms }}
           push: ${{ inputs.push }}
           tags: ${{ steps.meta.outputs.tags }}
