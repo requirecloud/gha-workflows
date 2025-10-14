@@ -3,6 +3,11 @@ name: Build Docker image
 on:
   workflow_call:
     inputs:
+      dockerfile:
+        description: 'Dockerfile to use'
+        required: false
+        type: string
+        default: Dockerfile
       image:
         description: 'Docker image name'
         required: true
@@ -81,7 +86,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./Dockerfile
+          file: ./${{ inputs.dockerfile }}
           platforms: ${{ inputs.platforms }}
           push: ${{ inputs.push }}
           tags: ${{ steps.meta.outputs.tags }}
