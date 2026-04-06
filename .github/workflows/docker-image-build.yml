@@ -57,7 +57,7 @@ jobs:
       # Only login if we're pushing
       - name: Login to Docker Registry
         if: ${{ inputs.push }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ inputs.registry }}
           username: ${{ github.actor }}
